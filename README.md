@@ -1,5 +1,4 @@
-# morsePico
-One Button Morse Code USB Keyboard
+# One Button Morse Code USB Keyboard
 
 This one button keyboard can output all of the standard letters, numbers, and symbols on a US Layout keyboard.
 
