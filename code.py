@@ -1,22 +1,33 @@
 # One Button Morse Code - HID USB Keyboard 
 # Using CircuitPython and Raspberry Pi Pico
 # Gboard definitons included for special characters
-# 07.24.2021 Spike Snell 
+# 08.04.2021 Spike Snell 
 
 # Import the required abilities
 from time import sleep
-from board import LED, GP10
+from board import LED, GP10, GP15
 from digitalio import DigitalInOut, Direction, Pull
 from usb_hid import devices
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
+from pwmio import PWMOut
 
 # Define the dit max length
 dit = 13
 
 # Define the multiplyer for character timeout
 mult = 3
+
+# Define the volume
+vol = 55555
+
+# Define the frequency
+freq = 4444
+
+# Set buzzer mute to false by default
+# Entering SHIFT ( ....-. ) twice in a row toggles this value
+mute = False
 
 # Define the keyboard
 keyboard = Keyboard(devices)
@@ -35,6 +46,9 @@ button = DigitalInOut(GP10)
 
 # Set the button as a pull up input
 button.switch_to_input(pull=Pull.UP)
+
+# Define the buzzer
+buzzer = PWMOut(GP15, frequency=freq, duty_cycle=0)
 
 # Morse code character dictionary
 MorseCodes = {
@@ -156,11 +170,20 @@ while True:
             # Turn on the LED
             led.value = True
 
+            # As long as the buzzer is not muted
+            if mute == False:
+
+                # Turn on the buzzer
+                buzzer.duty_cycle = vol
+
         # Button not pressed
         else:
 
             # Set the LED to off
             led.value = False
+ 
+            # Turn off the buzzer
+            buzzer.duty_cycle = 0
 
             # If our time count is greater than zero
             if TimeCount > 0:
@@ -194,9 +217,21 @@ while True:
 
                     # If the current key entered was a shift
                     if CurrentKey == '....-.':
+
+                        # If shift was entered a second time 
+                        if shiftMode == True:
                         
-                        # Set shift mode to true
-                        shiftMode = True
+                            # Toggle the buzzer mute
+                            mute = not mute
+
+                            # Set shift mode to false
+                            shiftMode = False
+
+                        # Else set shift mode to true
+                        else: 
+
+                            # Set shift mode to true
+                            shiftMode = True
 
                     # If we actually found the key in our dictionary
                     if key != '':
@@ -221,4 +256,3 @@ while True:
 
         # Sleep one unit of time            
         sleep(0.01)
-
