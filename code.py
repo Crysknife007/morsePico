@@ -254,6 +254,9 @@ while True:
 
                     # If we actually found the key in our dictionary
                     if key != '':
+
+                        # Set last key printable flag back to false each time we have a key
+                        lastKeyPrintable = False
                        
                         # If we are not in shift mode
                         if shiftMode == False:
