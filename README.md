@@ -4,7 +4,7 @@ This one button keyboard can output all of the standard letters, numbers, and sy
 
 A physical button is connected between ground and GP10 for input. The built in LED is used to show when the button is being pressed. GP15 Can be connected to a buzzer if audio output is desired. To toggle the sound on and off the SHIFT command is entered twice with the keying device.
 
-Autospacing after a delay between entering characters can be toggled by entering the SHIFT code and then the SPACE code.
+Autospacing after a delay between entering characters can be toggled by entering the SHIFT code and then the SPACE code. Similarly capslock mode is initied by the SHIFT code followed by the ENTER code. Pressing alt+number is emulated by pressing SHIFT code and then the number you want to alt press to. 
 
 To get the code running circuit python needs to be flashed to the pico. The UF2 firmware I used is included but it is possible that newer releases may continue to work. The uf2 file is placed in the root directory of a mounted pico and then it automatically reboots once it is ready. 
 
