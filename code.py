@@ -1,7 +1,7 @@
 # One Button Morse Code - HID USB Keyboard 
 # Using CircuitPython and Raspberry Pi Pico
 # Gboard definitons included for special characters
-# 08.08.2021 Spike Snell 
+# 08.09.2021 Spike Snell 
 
 # Import the required abilities
 from time import sleep
@@ -29,9 +29,13 @@ freq = 4444
 # Entering SHIFT ( ....-. ) twice in a row toggles this value
 mute = False
 
-# Set auto spacing to false by default
-# Entering SHIFT ( ....-. ) and then SPACE ( ..-- ) toggles auto entry of space
-autoSpace = False
+# Set auto spacing to true by default
+# Entering SHIFT ( ....-. ) and then SPACE ( ..-- ) toggles autospacing
+autoSpace = True
+
+# Set capslock to false by default
+# Entering SHIFT ( ....-. ) and then ENTER( .-.- ) toggles capslock
+capslock = False
 
 # Set last key printable flag to false by default
 lastKeyPrintable = False
@@ -56,6 +60,18 @@ button.switch_to_input(pull=Pull.UP)
 
 # Define the buzzer
 buzzer = PWMOut(GP15, frequency=freq, duty_cycle=0)
+
+# Initilize the time count
+TimeCount = 0
+
+# Initilize character lookup delay count
+DelayCount = 0
+
+# Initialize the current character string
+CurrentKey = ''
+
+# Initialize the shift mode
+shiftMode = False
 
 # Morse code character dictionary
 MorseCodes = {
@@ -147,158 +163,227 @@ def keycodeLookup(keystring):
     # If we don't find anything return an empty string
     return ''
 
-# Monitor the button and output characters forever
+# Handle SHIFT shortcuts
+def shiftHandler():
+
+    # Use the global values of our flags
+    global lastKeyPrintable, shiftMode, mute, autoSpace, capslock, key
+
+    # If the current key entered was a shift
+    if CurrentKey == '....-.':
+
+        # Set last key printable flag back to false
+        lastKeyPrintable = False
+
+        # If shift was entered a second time 
+        if shiftMode == True:
+                        
+            # Toggle the buzzer mute
+            mute = not mute
+
+            # Set shift mode to false
+            shiftMode = False
+
+        # Else set shift mode to true
+        else: 
+
+            # Set shift mode to true
+            shiftMode = True
+
+    # If we are already in shift mode
+    if shiftMode == True:
+
+        # If the key entered was SPACE
+        if key == ' ':
+                        
+            # Toggle auto space
+            autoSpace = not autoSpace
+
+        # If the key entered was ENTER
+        if key == '\n':
+
+            # Toggle capslock
+            capslock = not capslock
+
+        # If the key entered was 1
+        if key == '1':
+
+            # Press alt + 1
+            keyboard.press(Keycode.ALT, Keycode.ONE)
+
+        # If the key entered was 2
+        if key == '2':
+
+            # Press alt + 2
+            keyboard.press(Keycode.ALT, Keycode.TWO)
+
+        # If the key entered was 3
+        if key == '3':
+
+            # Press alt + 3
+            keyboard.press(Keycode.ALT, Keycode.THREE)
+
+        # If the key entered was 4
+        if key == '4':
+
+            # Press alt + 4
+            keyboard.press(Keycode.ALT, Keycode.FOUR)
+
+        # If the key entered was 5
+        if key == '5':
+
+            # Press alt + 5
+            keyboard.press(Keycode.ALT, Keycode.FIVE)
+
+        # If the key entered was 6
+        if key == '6':
+
+            # Press alt + 6
+            keyboard.press(Keycode.ALT, Keycode.SIX)
+
+        # If the key entered was 7
+        if key == '7':
+
+            # Press alt + 7
+            keyboard.press(Keycode.ALT, Keycode.SEVEN)
+
+        # If the key entered was 8
+        if key == '8':
+
+            # Press alt + 8
+            keyboard.press(Keycode.ALT, Keycode.EIGHT)
+
+        # If the key entered was 9
+        if key == '9':
+
+            # Press alt + 9
+            keyboard.press(Keycode.ALT, Keycode.NINE)
+
+        # If the key entered was 0
+        if key == '0':
+
+            # Press alt + 0
+            keyboard.press(Keycode.ALT, Keycode.ZERO)
+
+        # Release all the keys
+        keyboard.release(0)
+            
+# Loop forever
 while True:
 
-    # Initilize the time count
-    TimeCount = 0
+    # If the button is pressed
+    if button.value == False:
 
-    # Initilize letter lookup delay count
-    DelayCount = 0
+        # Reset the delay count
+        DelayCount = 0
 
-    # Initialize the current letter string
-    CurrentKey = ''
+        # Add 1 to the time count
+        TimeCount += 1
 
-    # Initialize the shift mode
-    shiftMode = False
+        # Turn on the LED
+        led.value = True
 
-    # Loop forever
-    while True:
+        # As long as the buzzer is not muted
+        if mute == False:
 
-        # Button pressed
-        if button.value == False:
+            # Turn on the buzzer
+            buzzer.duty_cycle = vol
 
-            # Reset the delay count
-            DelayCount = 0
+    # Else if the button is not pressed
+    else:
 
-            # Add 1 to the time count
-            TimeCount += 1
-
-            # Turn on the LED
-            led.value = True
-
-            # As long as the buzzer is not muted
-            if mute == False:
-
-                # Turn on the buzzer
-                buzzer.duty_cycle = vol
-
-        # Button not pressed
-        else:
-
-            # Set the LED to off
-            led.value = False
+        # Set the LED to off
+        led.value = False
  
-            # Turn off the buzzer
-            buzzer.duty_cycle = 0
+        # Turn off the buzzer
+        buzzer.duty_cycle = 0
 
-            # If our time count is greater than zero
-            if TimeCount > 0:
+        # If our time count is greater than zero
+        if TimeCount > 0:
 
-                # If our time count is less than or equal to our dit length
-                if TimeCount <= dit:
+            # If our time count is less than or equal to our dit length
+            if TimeCount <= dit:
 
-                    # Add a dit to our current key
-                    CurrentKey = CurrentKey + '.'
+                # Add a dit to our current key
+                CurrentKey = CurrentKey + '.'
 
-                # Else if our time count is greater than the dit length
-                elif TimeCount > dit:
+            # Else if our time count is greater than the dit length
+            elif TimeCount > dit:
 
-                    # Add a dah to our current key
-                    CurrentKey = CurrentKey + '-'
+                # Add a dah to our current key
+                CurrentKey = CurrentKey + '-'
             
-            # Reset our time count to 0
-            TimeCount = 0
+        # Reset our time count to 0
+        TimeCount = 0
 
-            # Add one to our delay count
-            DelayCount += 1
+        # Add one to our delay count
+        DelayCount += 1
 
-            # Else if our delay count is greater than our dit length times the multipler
-            if DelayCount > dit * mult:
+        # Else if our delay count is greater than our dit length times the multipler
+        if DelayCount > dit * mult:
 
-                # As long as the current key is not an empty string
-                if CurrentKey != '':
+            # As long as the current key is not an empty string
+            if CurrentKey != '':
                    
-                    # Lookup the current key
-                    key = keycodeLookup(CurrentKey)
+                # Lookup the current key
+                key = keycodeLookup(CurrentKey)
 
-                    # If the current key entered was a shift
-                    if CurrentKey == '....-.':
+                # Run the SHIFT handler
+                shiftHandler()
 
-                        # Set last key printable flag back to false
-                        lastKeyPrintable = False
+                # If we actually found the key in our dictionary
+                if key != '':
 
-                        # If shift was entered a second time 
-                        if shiftMode == True:
-                        
-                            # Toggle the buzzer mute
-                            mute = not mute
-
-                            # Set shift mode to false
-                            shiftMode = False
-
-                        # Else set shift mode to true
-                        else: 
-
-                            # Set shift mode to true
-                            shiftMode = True
-
-                    # If the current key entered was space
-                    if CurrentKey == '..--':
-
-                        # If we are already in shift mode
-                        if shiftMode == True:
-                        
-                            # Toggle auto space
-                            autoSpace = not autoSpace
-
-                    # If we actually found the key in our dictionary
-                    if key != '':
-
-                        # Set last key printable flag back to false each time we have a key
-                        lastKeyPrintable = False
+                    # Set last key printable flag back to false each time we have a key
+                    lastKeyPrintable = False
                        
-                        # If we are not in shift mode
-                        if shiftMode == False:
+                    # If we are not in shift mode
+                    if shiftMode == False:
 
-                            # Write the current key on the us layout
-                            kl.write(key)
+                        # If capslock is on uppercase the key
+                        if capslock == True:
 
-                            # Check to see if we can set last char printable flag
-                            if ( ( key != ' ' ) and ( key != '\n' ) and ( key != '\b' ) ):
+                            # Uppercase the key
+                            key = key.upper()
+
+                        # Write the current key on the us layout
+                        kl.write(key)
+
+                        # Check to see if we can set last char printable flag
+                        if ( ( key != ' ' ) and ( key != '\n' ) and ( key != '\b' ) ):
                             
-                                # Set last key printable flag to true
-                                lastKeyPrintable = True
+                            # Set last key printable flag to true
+                            lastKeyPrintable = True
 
-                        # Else we are in shift mode
-                        else:
+                    # Else we are in shift mode
+                    else:
 
-                            # Set shift mode to false
-                            shiftMode = False
+                        # Set shift mode to false
+                        shiftMode = False
 
-                            # Check to see if we can set last char printable flag
-                            if ( ( key != ' ' ) and ( key != '\n' ) and ( key != '\b' ) ):
+                        # Check to see if we can set last char printable flag
+                        if ( ( key != ' ' ) and ( key != '\n' ) and ( key != '\b' ) ):
 
-                                # Write the current key uppercased on the us layout
-                                kl.write(key.upper())
+                            # Write the current key uppercased on the us layout
+                            kl.write(key.upper())
                                 
-                                # Set last key printable flag to true
-                                lastKeyPrintable = True
+                            # Set last key printable flag to true
+                            lastKeyPrintable = True
 
-                    # Set the current letter back to an empty string    
-                    CurrentKey = ''
+                # Set the current letter back to an empty string    
+                CurrentKey = ''
 
-                # If we need to enter a space here
-                if DelayCount > ( dit * mult ) * 3:
+            # After a longer timeout
+            if DelayCount > ( dit * mult ) * 3:
 
-                    # If auto spacing is true and the last key was printable
-                    if ( ( autoSpace == True ) and ( lastKeyPrintable == True ) ) :
+                # If auto spacing is true and the last key was printable
+                if ( ( autoSpace == True ) and ( lastKeyPrintable == True ) ) :
 
-                        # Write a space to the screen
-                        kl.write(' ')
+                    # Write a space to the screen
+                    kl.write(' ')
 
-                        # Set last key printable flag back to false
-                        lastKeyPrintable = False
+                    # Set last key printable flag back to false
+                    lastKeyPrintable = False
 
-        # Sleep one unit of time            
-        sleep(0.01)
+    # Sleep one unit of time            
+    sleep(0.01)
