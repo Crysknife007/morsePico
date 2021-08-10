@@ -266,7 +266,7 @@ def shiftHandler():
             keyboard.press(Keycode.ALT, Keycode.ZERO)
 
         # Release all the keys
-        keyboard.release(0)
+        keyboard.release_all();
             
 # Loop forever
 while True:
@@ -350,8 +350,11 @@ while True:
                         kl.write(key)
 
                         # Check to see if we can set last char printable flag
-                        if ( ( key != ' ' ) and ( key != '\n' ) and ( key != '\b' ) ):
-                            
+                        if ( ( key != ' ' )  and 
+                             ( key != '\n' ) and 
+                             ( key != '\b' ) 
+                        ):
+
                             # Set last key printable flag to true
                             lastKeyPrintable = True
 
@@ -362,7 +365,20 @@ while True:
                         shiftMode = False
 
                         # Check to see if we can set last char printable flag
-                        if ( ( key != ' ' ) and ( key != '\n' ) and ( key != '\b' ) ):
+                        if ( ( key != ' ' )  and 
+                             ( key != '\n' ) and 
+                             ( key != '\b' ) and
+                             ( key != '0' )  and
+                             ( key != '1' )  and
+                             ( key != '2' )  and
+                             ( key != '3' )  and
+                             ( key != '4' )  and
+                             ( key != '5' )  and
+                             ( key != '6' )  and
+                             ( key != '7' )  and
+                             ( key != '8' )  and
+                             ( key != '9' )
+                        ):
 
                             # Write the current key uppercased on the us layout
                             kl.write(key.upper())
@@ -377,13 +393,14 @@ while True:
             if DelayCount > ( dit * mult ) * 3:
 
                 # If auto spacing is true and the last key was printable
-                if ( ( autoSpace == True ) and ( lastKeyPrintable == True ) ) :
+                if ( ( autoSpace == True ) and ( lastKeyPrintable == True ) ):
 
                     # Write a space to the screen
                     kl.write(' ')
 
                     # Set last key printable flag back to false
                     lastKeyPrintable = False
+
 
     # Sleep one unit of time            
     sleep(0.01)
