@@ -205,6 +205,12 @@ def shiftHandler():
             # Toggle capslock
             capslock = not capslock
 
+        # If the key entered was BACKSPACE
+        if key == '\b':
+
+            # Press backspace 5 times
+            kl.write('\b\b\b\b\b')
+
         # If the key entered was 1
         if key == '1':
 
