@@ -1,5 +1,7 @@
 # One Button Morse Code USB Keyboard
 
+![Morse Pico](https://raw.githubusercontent.com/Crysknife007/morsePico/main/key.jpg)
+
 This one button keyboard can output all of the standard letters, numbers, and symbols on a US Layout keyboard.
 
 A physical button is connected between ground and GP10 for input. The built in LED is used to show when the button is being pressed. GP15 Can be connected to a buzzer if audio output is desired. To toggle the sound on and off the SHIFT command is entered twice with the keying device.
