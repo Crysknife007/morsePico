@@ -1,7 +1,7 @@
 # One Button Morse Code - HID USB Keyboard 
 # Using CircuitPython and Raspberry Pi Pico
 # Gboard definitons included for special characters
-# 08.09.2021 Spike Snell 
+# 08.16.2021 Spike Snell 
 
 # Import the required abilities
 from time import sleep
@@ -20,10 +20,10 @@ dit = 13
 mult = 3
 
 # Define the volume
-vol = 55555
+vol = 60000
 
 # Define the frequency
-freq = 4444
+freq = 700
 
 # Set buzzer mute to false by default
 # Entering SHIFT ( ....-. ) twice in a row toggles this value
@@ -208,8 +208,8 @@ def shiftHandler():
         # If the key entered was BACKSPACE
         if key == '\b':
 
-            # Press backspace 5 times
-            kl.write('\b\b\b\b\b')
+            # Press backspace 10 times
+            kl.write('\b\b\b\b\b\b\b\b\b\b')
 
         # If the key entered was 1
         if key == '1':
