@@ -1,7 +1,7 @@
 # One Button Morse Code - HID USB Keyboard 
 # Using CircuitPython and Raspberry Pi Pico
 # Gboard definitons included for special characters
-# 08.16.2021 Spike Snell 
+# 08.18.2021 Spike Snell 
 
 # Import the required abilities
 from time import sleep
@@ -211,6 +211,12 @@ def shiftHandler():
             # Press backspace 10 times
             kl.write('\b\b\b\b\b\b\b\b\b\b')
 
+        # If the key entered was FORWARD SLASH
+        if key == '/':
+
+            # Press TAB
+            keyboard.press(Keycode.TAB)
+
         # If the key entered was 1
         if key == '1':
 
@@ -374,6 +380,7 @@ while True:
                         if ( ( key != ' ' )  and 
                              ( key != '\n' ) and 
                              ( key != '\b' ) and
+                             ( key != '/' ) and
                              ( key != '0' )  and
                              ( key != '1' )  and
                              ( key != '2' )  and
