@@ -1,7 +1,7 @@
 # One Button Morse Code - HID USB Keyboard 
 # Using CircuitPython and Raspberry Pi Pico
 # Gboard definitons included for special characters
-# 08.18.2021 Spike Snell 
+# 09.02.2021 Spike Snell 
 
 # Import the required abilities
 from time import sleep
@@ -23,7 +23,7 @@ mult = 3
 vol = 60000
 
 # Define the frequency
-freq = 700
+freq = 2500
 
 # Set buzzer mute to false by default
 # Entering SHIFT ( ....-. ) twice in a row toggles this value
@@ -277,6 +277,36 @@ def shiftHandler():
             # Press alt + 0
             keyboard.press(Keycode.ALT, Keycode.ZERO)
 
+        # If the key entered was ^
+        if key == '^':
+ 
+            # Press UP
+            keyboard.press(Keycode.UP_ARROW)
+
+        # If the key entered was _
+        if key == '_':
+ 
+            # Press DOWN
+            keyboard.press(Keycode.DOWN_ARROW)
+
+        # If the key entered was <
+        if key == '<':
+ 
+            # Press LEFT
+            keyboard.press(Keycode.LEFT_ARROW)
+
+        # If the key entered was >
+        if key == '>':
+ 
+            # Press RIGHT
+            keyboard.press(Keycode.RIGHT_ARROW)
+
+        # If the key entered was !
+        if key == '!':
+ 
+            # Press ESCAPE
+            keyboard.press(Keycode.ESCAPE)
+
         # Release all the keys
         keyboard.release_all();
             
@@ -380,7 +410,12 @@ while True:
                         if ( ( key != ' ' )  and 
                              ( key != '\n' ) and 
                              ( key != '\b' ) and
-                             ( key != '/' ) and
+                             ( key != '/' )  and
+                             ( key != '^' )  and
+                             ( key != '_' )  and
+                             ( key != '<' )  and
+                             ( key != '>' )  and
+                             ( key != '!' )  and
                              ( key != '0' )  and
                              ( key != '1' )  and
                              ( key != '2' )  and
