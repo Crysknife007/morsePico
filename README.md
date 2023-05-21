@@ -19,3 +19,8 @@ A pdf of all the recognized characters is included to assist with memorization. 
 Using these additional standard definitions from Gboard all the rest of the standard symbols on a US Layout keyboard can be entered, as well as the Enter, Space, Backspace, and Shift key.
 
 When inputting a Shift key there is no visible output at first, but the Shift key will be applied to the next character typed. This is the standard practice that is also used in Gboard. In this way all of the standard letters can be capitalized. 
+
+-- Edit May 20 2023
+
+I added a Dvorak keybindings file so that I don't have to switch my layout back to US bindings to utilize this morse keyboard.
+To use the Dvorak bindings place the keyboard_layout_dvorak.py file into the lib/adafruit_hid library and rename it to keyboard_layout_us.py
