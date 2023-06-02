@@ -1,4 +1,4 @@
-# One Button Morse Code USB Keyboard
+# Morse Code USB Keyboard
 
 ![Morse Pico](https://raw.githubusercontent.com/Crysknife007/morsePico/main/key.jpg)
 
