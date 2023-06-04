@@ -248,8 +248,8 @@ class KeyboardLayoutUS:
         b"\x8f"  # N
         b"\x96"  # O
         b"\x95"  # P
-        b"\x92"  # R
         b"\x9b"  # Q
+        b"\x92"  # R
         b"\xb3"  # S
         b"\x8e"  # T
         b"\x89"  # U
