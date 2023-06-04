@@ -1,7 +1,7 @@
 # One Button Morse Code - HID USB Keyboard 
 # Using CircuitPython and Raspberry Pi Pico
 # Gboard definitons included for special characters
-# 09.02.2021 Spike Snell 
+# 06.04.2023 Spike Snell 
 
 # Import the required abilities
 from time import sleep
@@ -23,7 +23,7 @@ mult = 3
 vol = 60000
 
 # Define the frequency
-freq = 2500
+freq = 1200
 
 # Set buzzer mute to false by default
 # Entering SHIFT ( ....-. ) twice in a row toggles this value
@@ -437,8 +437,8 @@ while True:
                 # Set the current letter back to an empty string    
                 CurrentKey = ''
 
-            # After a longer timeout
-            if DelayCount > ( dit * mult ) * 3:
+            # After dit times 7 we have a word seperator
+            if DelayCount > ( dit * 7 ):
 
                 # If auto spacing is true and the last key was printable
                 if ( ( autoSpace == True ) and ( lastKeyPrintable == True ) ):
